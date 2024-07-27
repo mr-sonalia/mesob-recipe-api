@@ -1,0 +1,13 @@
+services:
+    pg-db-orthanc:
+        image: postgres:15
+        environment:
+            POSTGRES_USER:  $DB_USERNAME
+            POSTGRES_PASSWORD: $DB_PASSWORD
+            PGDATA: /var/lib/postgresql/data/db-files/
+            POSTGRES_DB:  $DB_NAME
+        ports:
+            - "5434:5434"
+        command: postgres -p 5434 -c 'max_connections=1000'
+        volumes:
+            - ./pgdata/db-files:/var/lib/postgresql/data/db-files
