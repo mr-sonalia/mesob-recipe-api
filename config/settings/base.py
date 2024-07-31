@@ -1,6 +1,7 @@
-from pathlib import Path
 import os
 from datetime import timedelta
+from pathlib import Path
+
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -194,3 +195,15 @@ SIMPLE_JWT = {
 
 # Password reset token lifetime
 DJANGO_REST_MULTITOKENAUTH_RESET_TOKEN_EXPIRY_TIME = 3  # in hours
+
+
+# Rabbitmq settings
+RABBITMQ_DEFAULT_PASS = config("RABBITMQ_DEFAULT_PASS")
+RABBITMQ_DEFAULT_USER = config("RABBITMQ_DEFAULT_USER")
+RABBITMQ_HOST = config("RABBITMQ_HOST")
+RABBITMQ_PORT = config("RABBITMQ_PORT", cast=int)
+
+
+# Celery settings
+CELERY_BROKER_URL = f"amqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@{RABBITMQ_HOST}:{RABBITMQ_PORT}"
+CELERY_TIMEZONE = "Asia/Kolkata"
