@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     # Local apps
     'users',
     'recipe',
+
+    # Celelry
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -207,3 +210,4 @@ RABBITMQ_PORT = config("RABBITMQ_PORT", cast=int)
 # Celery settings
 CELERY_BROKER_URL = f"amqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@{RABBITMQ_HOST}:{RABBITMQ_PORT}"
 CELERY_TIMEZONE = "Asia/Kolkata"
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'

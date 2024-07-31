@@ -8,21 +8,37 @@ services:
         # env_file:
         #   - .env
         environment:
+            SECRET_KEY: $SECRET_KEY
+            
             DB_HOSTNAME: $DOCKER_DB_HOSTNAME
             DB_PORT: $DB_PORT
             DB_NAME: $DB_NAME
             DB_USERNAME: $DB_USERNAME
             DB_PASSWORD: $DB_PASSWORD
 
-            SECRET_KEY: $SECRET_KEY
             EMAIL_USER: $EMAIL_USER
             EMAIL_PASSWORD: $EMAIL_PASSWORD
 
-        command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 # for production
+            RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
+            RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
+            RABBITMQ_HOST: $RABBITMQ_HOST
+            RABBITMQ_PORT: $RABBITMQ_PORT
+
+        # command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 # for production
         # command: python manage.py runserver # for development
-        # depends_on:
-        #     pg-db:
-        #         condition: service_healthy
+    
+    # celery-worker:
+    #   container_name: celery-worker
+    #   build: .
+    #   user: appuser
+    #   environment:
+    #     SECRET_KEY: $SECRET_KEY
+    #     DJANGO_ALLOWED_HOSTS: localhost 127.0.0.1 [::1]
+    #   command: celery -A config.celery worker --loglevel=info
+
+    #   depends_on:
+    #     - server
+    #     - rabbitmq
 
     pg-db:
         image: postgres:15

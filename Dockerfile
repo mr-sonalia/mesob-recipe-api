@@ -42,8 +42,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 	--mount=type=bind,source=requirements.txt,target=requirements.txt \
 	python -m pip install -r requirements.txt
 
-# Switch to the non-privileged user to run the application.
-USER appuser
 
 # Copy the source code into the container.
 COPY . .
@@ -51,5 +49,18 @@ COPY . .
 # Expose the port that the application runs on.
 EXPOSE ${APPLICATION_PORT}
 
+#  Run celery worker
+COPY ./celery-start-scripts/worker.bash /start-celeryworker
+# RUN sed -i 's/\r$//g' /start-celeryworker
+RUN chmod +x /start-celeryworker
+
+# Run celery beat
+COPY ./celery-start-scripts/beat.bash /start-celerybeat
+# RUN sed -i 's/\r$//g' /start-celerybeat
+RUN chmod +x /start-celerybeat
+
+# Switch to the non-privileged user to run the application.
+USER appuser
+
 # Run the application.
-# CMD  gunicorn config.wsgi:application --bind 0.0.0.0:8000 
+CMD  gunicorn config.wsgi:application --bind 0.0.0.0:8000 
