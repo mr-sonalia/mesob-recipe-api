@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
+from django.utils import timezone
+from datetime import timedelta
 
 class RecipeCategory(models.Model):
     """
@@ -52,6 +54,12 @@ class Recipe(models.Model):
 
     def get_total_number_of_bookmarks(self):
         return self.bookmarked_by.count()
+    
+    @staticmethod
+    def get_daily_likes(author):
+        # Daily likes received by the author
+        last_24_hours = timezone.now() - timedelta(days=1)
+        return Recipe.objects.filter(author=author, recipelike__created__gte=last_24_hours).aggregate(total_likes=models.Count('recipelike'))['total_likes']
 
 
 class RecipeLike(models.Model):
