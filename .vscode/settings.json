@@ -1,0 +1,17 @@
+{
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.formatOnSave": false,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5434,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "name": "Recipe API DB",
+            "database": "recipe_db",
+            "username": "recipe_db_user"
+        }
+    ],
+}
