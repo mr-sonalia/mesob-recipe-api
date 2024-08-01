@@ -14,7 +14,6 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Create a non-privileged user that the app will run under.
-# See https://docs.docker.com/go/dockerfile-user-best-practices/
 ARG UID=10001
 RUN adduser \
 	--disabled-password \
@@ -32,10 +31,6 @@ RUN apt update \
 
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
-# Leverage a bind mount to requirements.txt to avoid having to copy them into
-# into this layer.
-
 RUN python -m pip install --upgrade pip
 
 RUN --mount=type=cache,target=/root/.cache/pip \
@@ -50,17 +45,25 @@ COPY . .
 EXPOSE ${APPLICATION_PORT}
 
 #  Run celery worker
-COPY ./celery-start-scripts/worker.bash /start-celeryworker
+# COPY ./start-scripts/django.bash /app/start-server
 # RUN sed -i 's/\r$//g' /start-celeryworker
-RUN chmod +x /start-celeryworker
+# RUN chmod +x /app/start-server
+
+#  Run celery worker
+# COPY ./start-scripts/worker.bash /app/start-celeryworker
+# RUN sed -i 's/\r$//g' /start-celeryworker
+# RUN chmod +x /app/start-celeryworker
 
 # Run celery beat
-COPY ./celery-start-scripts/beat.bash /start-celerybeat
+# COPY ./start-scripts/beat.bash /app/start-celerybeat
 # RUN sed -i 's/\r$//g' /start-celerybeat
-RUN chmod +x /start-celerybeat
+# RUN chmod +x /app/start-celerybeat
 
 # Switch to the non-privileged user to run the application.
 USER appuser
 
+#  Run migrations
+# RUN python manage.py migrate
+
 # Run the application.
-CMD  gunicorn config.wsgi:application --bind 0.0.0.0:8000 
+CMD  gunicorn config.wsgi:application --bind 0.0.0.0:8000
