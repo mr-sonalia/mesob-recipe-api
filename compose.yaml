@@ -32,7 +32,7 @@ services:
     celery-worker:
       container_name: celery-worker
       build: .
-      user: appuser
+      user: root #appuser
       environment:
         SECRET_KEY: $SECRET_KEY
         DJANGO_ALLOWED_HOSTS: localhost 127.0.0.1 host.docker.internal [::1]
@@ -57,7 +57,7 @@ services:
     celery-beat:
       container_name: celery-beat
       build: .
-      user: appuser
+      user: root #appuser
       environment:
         SECRET_KEY: $SECRET_KEY
         DJANGO_ALLOWED_HOSTS: localhost 127.0.0.1 host.docker.internal [::1]
