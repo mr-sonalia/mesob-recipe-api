@@ -1,3 +1,5 @@
+"""Celery tasks for the users app"""
+
 from celery.schedules import crontab
 from django.core.mail import send_mass_mail
 
