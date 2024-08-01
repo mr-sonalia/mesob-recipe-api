@@ -25,7 +25,8 @@ services:
             RABBITMQ_PORT: $RABBITMQ_PORT
 
         volumes:
-          - ./celery-schedule:/home/celery/var/run/celerybeat-schedule
+          - ./application-logs:/app/config/logs
+          # - ./celery-schedule:/home/celery/var/run/celerybeat-schedule
         # command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 # for production
         # command: python manage.py runserver # for development
     
